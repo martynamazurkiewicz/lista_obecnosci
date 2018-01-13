@@ -17,10 +17,13 @@ int dziennikObecnosci[dlugosc_dziennika] = {0};
 int i = 0;
 int j = 0;
 int k = 0;
+int jot = 0;
 int h = 0;
 int d = 0;
+int dlugosc = 0;
+int p = 0;
 int r = 0;
-int jot = 0;
+char spacja = 0;
 int siadloA = 0;
 int siadloB = 0;
 int siadloC = 0;
@@ -53,6 +56,7 @@ int liczbaDopuszczalnychLiterowek = 3;
 int main(){
 
 char dziennik[dlugosc_dziennika][szerokosc_dziennika] = {{NULL},}; //tablice pochodzą oczywiscie z pliku
+char dziennik2[dlugosc_dziennika][szerokosc_dziennika] = {{NULL},};; //tablice pochodzą oczywiscie z pliku
 char lista[dlugosclisty][szerokosclisty] = {{NULL},}; //tablice pochodzą oczywiscie z pliku
 char slownik[dlugoscslownika][szerokoscslownika] = {{NULL},};
 
@@ -66,10 +70,11 @@ char slownik[dlugoscslownika][szerokoscslownika] = {{NULL},};
 		char line_1[szerokosc_dziennika];
 		while(fgets(line_1, szerokosc_dziennika,file_1)) {
 			for(j=0;j<szerokosc_dziennika;j++){
-                if(line_1[j] == '\r' || line_1[j] == '\n'){
+                if(line_1[j] == '\r'|| line_1[j] == '\n'){
                     break;
                 }
                     dziennik[i][j] = line_1[j];
+					dziennik2[i][j] = line_1[j];
 			}
 			i++;
 		}
@@ -167,27 +172,9 @@ char slownik[dlugoscslownika][szerokoscslownika] = {{NULL},};
 			}
 		}
 
-        //przycinanie stringow (wolne miejsca w tablicach zmienione na spacje)
-        char spacja = 0;
-        int dlugosc;
-        int p;
-
-        for(j=0;j<dlugosc_dziennika;j++){
-            dlugosc=strlen(dziennik[j]);
-            for(p=dlugosc;p<szerokosc_dziennika-1;p++){
-                dziennik[j][p]= spacja;
-            }
-        }
-
-        for(h=0; h<dlugosclisty; h++){
-            dlugosc=strlen(lista[h]);
-			for(j=dlugosc;j<szerokosclisty-1;j++){
-                lista[h][j]= spacja;
-            }
-        }		//koniec przycinania
 
     //tutaj sprawdz dlugosc stringa w wierszu, miejsca puste (rozmiar wiersza-srtlen) wypelnij nullami
-//G��WNA P�TLA
+//GLOWNA PETLA
     for(i = 0; i < dlugosclisty; i++ ){//dla kazdej pozycji z listy
 
 
@@ -203,19 +190,26 @@ char slownik[dlugoscslownika][szerokoscslownika] = {{NULL},};
             if (flaga == 0)
             {
                 indeks = j; //pozycja z dziennik dopasowana do listy
+				siadloA = 1; //gdy znalazlem
+                if(dziennikObecnosci[indeks] == 0)
+                {
                 dziennikObecnosci[indeks] = 1;
-                siadloA = 1; //gdy znalazlem
-                printf("\n *Osoba: %s zostala znaleziona w dzienniku jako osoba: %s,",dziennik[j],lista[i]);
+				printf("\n Osoba: %s zostala znaleziona w dzienniku jako osoba: %s,",dziennik[j],lista[i]);
+				printf("\n Osoba ta znajduje sie w dzienniku na miejscu: %d.\n",indeks+1);}
+                else
+                {	printf(" Ta osoba jest juz na tej liscie.\n");
+                printf("----------------------------------------------------");
+				}
                 //printf(" indeks to: %d\n",indeks);
                 break;
             }
         } //koniec funkcji a
 
 		if (siadloA == 1) // trzeba sprawdzic co gdy jest 0
-       { printf(" osoba ta znajduje sie w dzienniku na miejscu: %d.\n",indeks+1); }
+       {  
+	   printf("----------------------------------------------------");} 
         else if (siadloA != 1)
-		{
-        //   printf("\nwszedlem do funkcji b  ");
+		{     //   printf("\nwszedlem do funkcji b  ");
 		  siadloB=0;
 	     	//Funkcja B
 	        //PRZESZUKIWANIE POD K�TEM LITER�WEK
@@ -231,10 +225,10 @@ char slownik[dlugoscslownika][szerokoscslownika] = {{NULL},};
 	    		}
 	    //	printf("liczba literowek: %d  ,   ",liczbaLiterowek);
 	    	//ZAPYTANIE O DOPASOWANIE DO POZYCJI Z DZIENNIKA
-	    	if (liczbaLiterowek < liczbaDopuszczalnychLiterowek && liczbaLiterowek !=0) //czyli max 2 liter�wki
+	    	if (liczbaLiterowek < liczbaDopuszczalnychLiterowek && liczbaLiterowek !=0) //czyli max 2 literowki
 			{
 				char odpowiedz;
-				printf("\nCzy chcesz dopasowac: \t");
+			/*	printf("\nCzy chcesz dopasowac: \t");
 	            for(k = 0; k < szerokosc_dziennika; k++)
 	                {
 	                    printf("%c", lista[i][k]);
@@ -245,13 +239,24 @@ char slownik[dlugoscslownika][szerokoscslownika] = {{NULL},};
 	                    printf("%c", dziennik[j][k]);
 	                }
 	            printf("? \n (jesli tak wpisz t)");
-				scanf(" %c", &odpowiedz); //nie usuwa� spacji przed %c!!!
+				scanf(" %c", &odpowiedz); //nie usuwa� spacji przed %c!!! */
+				
+				printf("\n Czy chcesz dopasowac %s do: %s",lista[i],dziennik[j]);
+				printf("\n    (WPISZ t JESLI TAK)  ");
+				scanf(" %c", &odpowiedz); //nie usuwac spacji przed %c!!!
 
-				if (odpowiedz == 't') //musi by� pojedynczy cudzys��w!!!
+				if (odpowiedz == 't') //musi byc pojedynczy cudzyslow!!!
 				{
 					indeks = j;
+					if(dziennikObecnosci[indeks] == 0){		
 					dziennikObecnosci[indeks] = 1;
-					printf(" osoba ta znajduje sie w dzienniku na miejscu: %d.\n", indeks+1);
+					printf(" Osoba ta znajduje sie w dzienniku na miejscu: %d.\n", indeks+1);
+					printf("----------------------------------------------------");
+					}
+					else
+					{ printf(" Ta osoba jest juz na tej liscie.\n");
+					printf("----------------------------------------------------");
+					}
 					siadloB=1;
 					break;
 				}
@@ -259,7 +264,7 @@ char slownik[dlugoscslownika][szerokoscslownika] = {{NULL},};
 				{
 					indeks = NULL;
 					siadloB=0;
-					printf("nie znaleziono osoby :( przejde do nastepnej funkcji \n");
+					printf(" Nie znaleziono osoby :( przejde do nastepnej funkcji \n");
 				}
 
 			}
@@ -273,7 +278,7 @@ char slownik[dlugoscslownika][szerokoscslownika] = {{NULL},};
                 //  printf("przechodze do funkcji C\n");
 
 				    	//FUNKCJA C
-
+						printf("\n ");
                         int licznik_i = 0; int licznik_j = 0; int licznik_l = 0;
                         char imie_dziennik[dlugosc_dziennika][szerokosc_dziennika] = {{0},};
                         char nazwisko_dziennik[dlugosc_dziennika][szerokosc_dziennika] = {{0},};
@@ -282,7 +287,6 @@ char slownik[dlugoscslownika][szerokoscslownika] = {{NULL},};
 
                         while (!isspace(lista[i][licznik_i]) && licznik_i<szerokosclisty){
                             imie[licznik_i] = lista[i][licznik_i];
-                            printf("%c",imie[licznik_i]);
                             licznik_i++;
                         }
 
@@ -297,7 +301,6 @@ char slownik[dlugoscslownika][szerokoscslownika] = {{NULL},};
 								break;
 							}
 							nazwisko[licznik_nazwisko] = lista[i][licznik_j];
-                            printf("%c",nazwisko[licznik_nazwisko]);
                             licznik_nazwisko++;
                         }
 
@@ -337,9 +340,16 @@ char slownik[dlugoscslownika][szerokoscslownika] = {{NULL},};
                                 if (strcmp(nazwisko,nazwisko_dziennik[d]) == 0) {
                                     indeks = d;
                                     siadloC = 1;
-                                    dziennikObecnosci[indeks] = 1;
-					                printf("\n *Osoba: %s %s zostala znaleziona w dzienniku jako osoba: %s", imie,nazwisko,dziennik[d]);
-                                    break;
+                                  	if(dziennikObecnosci[indeks] == 0) {
+										dziennikObecnosci[indeks] = 1;
+										printf(" Osoba: %s %s zostala znaleziona w dzienniku jako osoba: %s.\n", imie,nazwisko,dziennik[d]);
+										printf("----------------------------------------------------");
+					            	}
+					            	else { 
+										printf(" Ta osoba jest juz na tej liscie.\n");
+					            		printf("----------------------------------------------------");
+									}                                    
+									break;
                                 }
                             }
                         }
@@ -349,9 +359,16 @@ char slownik[dlugoscslownika][szerokoscslownika] = {{NULL},};
                                 if (strcmp(imie,imie_dziennik[d]) == 0) {
                                     indeks = d;
                                     siadloC = 1;
-                                    dziennikObecnosci[indeks] = 1;
-					                printf("\n *Osoba: %s %s zostala znaleziona w dzienniku jako osoba: %s", imie,nazwisko,dziennik[d]);
-                                    break;
+                                   if(dziennikObecnosci[indeks] == 0) {
+										dziennikObecnosci[indeks] = 1;
+										printf(" Osoba: %s %s zostala znaleziona w dzienniku jako osoba: %s.\n", imie,nazwisko,dziennik[d]);
+										printf("----------------------------------------------------");
+					            	}
+					            	else { 
+										printf(" Ta osoba jest juz na tej liscie.\n");
+					            		printf("----------------------------------------------------");
+									}
+									break;
                                 }
                             }
                         }
@@ -368,25 +385,39 @@ char slownik[dlugoscslownika][szerokoscslownika] = {{NULL},};
 
                         if (siadloC == 0){
 
-                            printf("\nNie mozemy dopasowac do dziennika: %s\n.,",lista[i]);
-                            printf("\nWyswietlimy dziennik, wybierz numer wiersza w ktorym znajduje sie dana osoba, lub wypisz 0 jezeli jej nie odnajdujesz: \n");
+                           //  printf("\n----------------------------------------------------");
+				    		printf("Nie mozemy dopasowac do dziennika: %s.",lista[i]);
+				    		printf("\n Wyswietlimy dziennik, wybierz numer wiersza w ktorym znajduje sie dana osoba, lub wypisz 0 jezeli jej nie odnajdujesz: \n");
 
-                            for(j = 0; j < dlugosc_dziennika; j++ ){
+							for(j=0;j<dlugosc_dziennika;j++){
+							printf("%d. %s\n",j+1,dziennik2[j]);  //dziennik
+								}
+							printf("\n");
+					
+					
+                           /* for(j = 0; j < dlugosc_dziennika; j++ ){
                                     printf("%d. ",j+1); //wyswietlam numer od 1 do 30 (odpowiada indeksowi)
                                 for( k = 0; k < szerokosc_dziennika; k++ ){
                                     printf( "%c", dziennik[j][k] ); //wyświetlam tablice dziennika
                                 }
                                     printf("\n");
-                                }
+                                } */
                             scanf( "%d", &indeks );
 
 					if (indeks==0)
-					   {  printf("ta osoba nie znajduje sie w dzienniku");
+					   {  printf("\n Ta osoba nie znajduje sie w dzienniku\n");
+					   printf("----------------------------------------------------");
 					      indeks = NULL; }
 					else if (indeks>=1 && indeks<=dlugosc_dziennika)
 					   { indeks=indeks-1; //bo wczesniej dodalismy 1, aby wyswietlac 1-30 (w rzeczywistosci jest 0-29)
-					printf("\nOsoba z listy znajduje sie w dzienniku na %d pozycji: %s.",indeks+1,dziennik[indeks]);
-					dziennikObecnosci[indeks] = 1;}
+					if(dziennikObecnosci[indeks] == 0)
+							{
+							dziennikObecnosci[indeks] = 1;
+							printf("\n Osoba z listy znajduje sie w dzienniku na %d pozycji: %s.\n",indeks+1,dziennik[indeks]);}
+						else
+							{ printf(" Ta osoba jest juz na tej liscie.\n");
+							}
+						printf("----------------------------------------------------");}					
 					else
 					   { printf("zle wpisales liczbe :(");
 					     indeks = NULL; }
@@ -405,16 +436,17 @@ char slownik[dlugoscslownika][szerokoscslownika] = {{NULL},};
     fp = fopen("obecnosci.txt", "w");
     for(i = 0; i < dlugosc_dziennika; i++) // rozmiar dziennika
     {
-    	fprintf(fp, "%d.", i+1);
+    	fprintf(fp, "\n%d. %s obecnosc: %d\n-------", i+1,dziennik2[i],dziennikObecnosci[i]);
 
-		for(k = 0; k < szerokosc_dziennika; k++)
+/*		for(k = 0; k < szerokosc_dziennika; k++)
 		{
 			fprintf(fp,"%c",dziennik[i][k]);
 		}
-		fprintf(fp,"\t obecno��: %d\n",dziennikObecnosci[i]);
-    }
+		fprintf(fp,"\t obecnosci: %d\n",dziennikObecnosci[i]);*/
+    } 
 	fclose(fp);
-	printf("\nWpisano obecnosci do dziennika\n");
+	printf("\n\n--------------------- WPISANO OBECNOSCI DO DZIENNIKA ----------------------- \n");
+	printf("\nWcisnij enter, aby wyjsc.\n");
 	getchar();
     getchar();
 }
