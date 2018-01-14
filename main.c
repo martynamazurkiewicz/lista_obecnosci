@@ -7,10 +7,10 @@
 
 #define dlugosc_dziennika 30
 #define szerokosc_dziennika 30
-#define dlugosclisty 10
-#define szerokosclisty 30
-#define dlugoscslownika 6
-#define szerokoscslownika 30
+#define dlugosc_listy 10
+#define szerokosc_listy 30
+#define dlugosc_slownika 6
+#define szerokosc_slownika 30
 
 int indeks = 0;
 int dziennikObecnosci[dlugosc_dziennika] = {0};
@@ -33,9 +33,9 @@ int liczbaDopuszczalnychLiterowek = 3;
 int main(){
 
 	char dziennik[dlugosc_dziennika][szerokosc_dziennika] = {{0},}; //tablice pochodzą oczywiscie z pliku
-	char dziennik2[dlugosc_dziennika][szerokosc_dziennika] = {{0},};; //tablice pochodzą oczywiscie z pliku
-	char lista[dlugosclisty][szerokosclisty] = {{0},}; //tablice pochodzą oczywiscie z pliku
-	char slownik[dlugoscslownika][szerokoscslownika] = {{0},};
+	char dziennik2[dlugosc_dziennika][szerokosc_dziennika] = {{0},}; //tablice pochodzą oczywiscie z pliku
+	char lista[dlugosc_listy][szerokosc_listy] = {{0},}; //tablice pochodzą oczywiscie z pliku
+	char slownik[dlugosc_slownika][szerokosc_slownika] = {{0},};
 
     //Wczytywanie dziennika
 	FILE* file_1 = fopen("dziennik.txt", "r");
@@ -71,9 +71,9 @@ int main(){
 	int il=0;
 	int jl=0;
 	if(file_2!=0) {
-		char line_2[szerokosclisty];
-		while(fgets(line_2, szerokosclisty,file_2)) {
-			for(jl=0;jl<szerokosclisty;jl++){
+		char line_2[szerokosc_listy];
+		while(fgets(line_2, szerokosc_listy,file_2)) {
+			for(jl=0;jl<szerokosc_listy;jl++){
                 if(line_2[jl] == '\r' || line_2[jl] == '\n'){
                     break;
                 }
@@ -85,7 +85,7 @@ int main(){
 	else printf("BLAD");
 	//Testowe Wyświetlanie
 	printf("\n-----Lista:-----\n");
-	for(il=0;il<dlugosclisty;il++){
+	for(il=0;il<dlugosc_listy;il++){
 			printf("%s\n",lista[il]);   //lista
 	}
 	printf("\n");
@@ -98,9 +98,9 @@ int main(){
     int is = 0;
     int js = 0;
     if (file_3 != 0) {
-        char line_3[szerokoscslownika];
-        while (fgets(line_3, szerokoscslownika, file_3)) {
-            for (js = 0; js<szerokoscslownika; js++) {
+        char line_3[szerokosc_slownika];
+        while (fgets(line_3, szerokosc_slownika, file_3)) {
+            for (js = 0; js<szerokosc_slownika; js++) {
                 if(line_3[js] == '\r' || line_3[js] == '\n'){
                     break;
                 }
@@ -112,7 +112,7 @@ int main(){
     else printf("BLAD");
     //Testowe wyświetlanie
     printf("-----Slownik:-----\n");
-    for (is = 0; is<dlugoscslownika; is++) {
+    for (is = 0; is<dlugosc_slownika; is++) {
         printf("%s\n", slownik[is]);  //slownik
     }
     printf("\n");
@@ -120,8 +120,8 @@ int main(){
     //Koniec Wczytywanie Slownika
 
     	//ZAMIANA NA MALE LITERY
-		for(i = 0; i < dlugosclisty; i++ ) {	
-			for (k = 0; k < szerokosclisty ; k++) {
+		for(i = 0; i < dlugosc_listy; i++ ) {	
+			for (k = 0; k < szerokosc_listy ; k++) {
 	    		lista[i][k] = tolower(lista[i][k]);
 			}
 		}
@@ -132,7 +132,7 @@ int main(){
 		}
 
 	//GLOWNA PETLA
-	for(i = 0; i < dlugosclisty; i++ ) {//dla kazdej pozycji z listy
+	for(i = 0; i < dlugosc_listy; i++ ) {//dla kazdej pozycji z listy
 		
 		indeks = 0;
 		siadloA = 0;
@@ -140,7 +140,7 @@ int main(){
 		siadloC = 0;
 
     //Funkcja A
-		for(j=0; j < szerokosclisty; j++) {
+		for(j=0; j < szerokosc_listy; j++) {
             if (strcmp(lista[i], dziennik[j]) == 0) {
                 indeks = j; //pozycja z dziennik dopasowana do listy
 				siadloA = 1; //gdy znalazlem
@@ -208,21 +208,18 @@ int main(){
 				int licznik_i = 0; int licznik_j = 0; int licznik_l = 0;
 				char imie_dziennik[dlugosc_dziennika][szerokosc_dziennika] = {{0},};
 				char nazwisko_dziennik[dlugosc_dziennika][szerokosc_dziennika] = {{0},};
-				char imie[szerokosclisty] = {0,};
-				char nazwisko[szerokosclisty] = {0,};
+				char imie[szerokosc_listy] = {0,};
+				char nazwisko[szerokosc_listy] = {0,};
+				char imie_slownik[dlugosc_slownika][szerokosc_slownika] = {{0},};
+				char zdrobnienie_slownik[dlugosc_slownika][szerokosc_slownika] = {{0},};
 
-				while (!isspace(lista[i][licznik_i]) && licznik_i<szerokosclisty) {
+				while (!isspace(lista[i][licznik_i]) && licznik_i<szerokosc_listy) {
 					imie[licznik_i] = lista[i][licznik_i];
 					licznik_i++;
 				}
 
-				dlugosc = strlen(imie);
-				for(p = dlugosc; p < szerokosclisty; p++) {
-					imie[p] = spacja;
-				}
-
 				int licznik_nazwisko = 0;
-				for (licznik_j = licznik_i+1; licznik_j < szerokosclisty; licznik_j++) {
+				for (licznik_j = licznik_i+1; licznik_j < szerokosc_listy; licznik_j++) {
 					if (lista[i][licznik_j] == 0) {
 						break;
 					}
@@ -230,32 +227,36 @@ int main(){
 					licznik_nazwisko++;
 				}
 
-					dlugosc = strlen(nazwisko);
-					for(p = dlugosc; p < szerokosclisty; p++) {
-						nazwisko[p] = spacja;
-					}
-
-				int licznik_k = 0;
+				int licznik_dziennik = 0;
 				int licznik_nazwisko_dziennik = 0;
-				for (licznik_k = 0; licznik_k < dlugosc_dziennika; licznik_k++) {
+				for (licznik_dziennik = 0; licznik_dziennik < dlugosc_dziennika; licznik_dziennik++) {
 					licznik_l = 0;
-					while (!isspace(dziennik[licznik_k][licznik_l]) && licznik_l < szerokosc_dziennika) {
-						imie_dziennik[licznik_k][licznik_l] = dziennik[licznik_k][licznik_l];
+					while (!isspace(dziennik[licznik_dziennik][licznik_l]) && licznik_l < szerokosc_dziennika) {
+						imie_dziennik[licznik_dziennik][licznik_l] = dziennik[licznik_dziennik][licznik_l];
 						licznik_l++;
-					}
-					dlugosc = strlen(imie_dziennik[licznik_k]);
-					for(p = dlugosc; p < szerokosc_dziennika; p++) {
-						imie_dziennik[licznik_k][p] = spacja;
 					}
 
 					licznik_nazwisko_dziennik = 0;
 					for (jot = licznik_l+1; jot < szerokosc_dziennika; jot++) {
-						nazwisko_dziennik[licznik_k][licznik_nazwisko_dziennik] = dziennik[licznik_k][jot];
+						nazwisko_dziennik[licznik_dziennik][licznik_nazwisko_dziennik] = dziennik[licznik_dziennik][jot];
 						licznik_nazwisko_dziennik++;
 					}
-					dlugosc = strlen(nazwisko_dziennik[licznik_k]);
-					for(p = dlugosc; p < szerokosc_dziennika; p++) {
-						nazwisko_dziennik[licznik_k][p] = spacja;
+				}
+
+				int licznik_slownik = 0;
+				int licznik_zdrobnienie_slownik = 0;
+				for (licznik_slownik = 0; licznik_slownik < dlugosc_slownika; licznik_slownik++) {
+					licznik_l = 0;
+					while (!isspace(slownik[licznik_slownik][licznik_l]) && licznik_l < szerokosc_slownika) {
+						imie_slownik[licznik_slownik][licznik_l] = slownik[licznik_slownik][licznik_l];
+						licznik_l++;
+					}
+
+					licznik_zdrobnienie_slownik = 0;
+					for (jot = licznik_l+1; jot < szerokosc_slownika; jot++) {
+						zdrobnienie_slownik[licznik_slownik][licznik_zdrobnienie_slownik] = slownik[licznik_slownik][jot];
+						printf("%c", zdrobnienie_slownik[licznik_slownik][licznik_zdrobnienie_slownik]);
+						licznik_zdrobnienie_slownik++;
 					}
 				}
 
