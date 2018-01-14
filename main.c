@@ -131,6 +131,12 @@ int main(){
 			}
 		}
 
+		for (j = 0; j < dlugosc_slownika; j++) {
+			for (k = 0; k < szerokosc_slownika; k++) {
+    			slownik[j][k] = tolower(slownik[j][k]);
+			}
+		}
+
 	//GLOWNA PETLA
 	for(i = 0; i < dlugosc_listy; i++ ) {//dla kazdej pozycji z listy
 		
@@ -146,11 +152,11 @@ int main(){
 				siadloA = 1; //gdy znalazlem
                 if(dziennikObecnosci[indeks] == 0) {
 					dziennikObecnosci[indeks] = 1;
-					printf("\n Osoba: %s zostala znaleziona w dzienniku jako osoba: %s,",dziennik[j],lista[i]);
+					printf("\n Osoba: %s zostala znaleziona w dzienniku jako osoba: %s.",lista[i],dziennik[j]);
 					printf("\n Osoba ta znajduje sie w dzienniku na miejscu: %d.\n",indeks+1);
 				}
                 else {	
-					printf(" Ta osoba jest juz na tej liscie.\n");
+					printf("\n Osoba: %s jest juz na tej liscie.\n", lista[i]);
                 	printf("----------------------------------------------------");
 				}
                 break;
@@ -181,11 +187,11 @@ int main(){
 						indeks = j;
 						if(dziennikObecnosci[indeks] == 0){		
 							dziennikObecnosci[indeks] = 1;
-							printf(" Osoba ta znajduje sie w dzienniku na miejscu: %d.\n", indeks+1);
+							printf("\n Osoba ta znajduje sie w dzienniku na miejscu: %d.\n", indeks+1);
 							printf("----------------------------------------------------");
 						}
 						else { 
-							printf(" Ta osoba jest juz na tej liscie.\n");
+							printf("\n Ta osoba jest juz na tej liscie.\n");
 							printf("----------------------------------------------------");
 						}
 						siadloB=1;
@@ -194,7 +200,7 @@ int main(){
 					else {
 						indeks = 0;
 						siadloB=0;
-						printf(" Nie znaleziono osoby :( przejde do nastepnej funkcji \n");
+						printf("\n Nie znaleziono osoby :( przejde do nastepnej funkcji \n");
 					}
 
 				}
@@ -204,7 +210,8 @@ int main(){
 
 			if (siadloB==0) { 
 				//FUNKCJA C
-				printf("\n ");
+
+				//rozdzielanie wyrazow
 				int licznik_i = 0; int licznik_j = 0; int licznik_l = 0;
 				char imie_dziennik[dlugosc_dziennika][szerokosc_dziennika] = {{0},};
 				char nazwisko_dziennik[dlugosc_dziennika][szerokosc_dziennika] = {{0},};
@@ -255,7 +262,6 @@ int main(){
 					licznik_zdrobnienie_slownik = 0;
 					for (jot = licznik_l+1; jot < szerokosc_slownika; jot++) {
 						zdrobnienie_slownik[licznik_slownik][licznik_zdrobnienie_slownik] = slownik[licznik_slownik][jot];
-						printf("%c", zdrobnienie_slownik[licznik_slownik][licznik_zdrobnienie_slownik]);
 						licznik_zdrobnienie_slownik++;
 					}
 				}
@@ -263,16 +269,17 @@ int main(){
 				//sprawdzam czy imie to skrot np. m. i dopasowuje do nazwiska
 				if (licznik_i < 3) {
 					for (d = 0; d < dlugosc_dziennika; d++) {
-						if (strcmp(nazwisko,nazwisko_dziennik[d]) == 0) {
+						if (strcmp(nazwisko,nazwisko_dziennik[d]) == 0 && imie[0]==imie_dziennik[d][0]) {
 							indeks = d;
 							siadloC = 1;
 							if(dziennikObecnosci[indeks] == 0) {
 								dziennikObecnosci[indeks] = 1;
-								printf("Osoba: %s %s zostala znaleziona w dzienniku jako osoba: %s.\n", imie,nazwisko,dziennik[d]);
+								printf("\n Osoba: %s %s zostala znaleziona w dzienniku jako osoba: %s.\n", imie,nazwisko,dziennik[d]);
+								printf("\n Osoba ta znajduje sie w dzienniku na miejscu: %d.\n",indeks+1);
 								printf("----------------------------------------------------");
 							}
 							else { 
-								printf(" Ta osoba jest juz na tej liscie.\n");
+								printf("\n Osoba %s %s jest juz na tej liscie.\n", imie, nazwisko);
 								printf("----------------------------------------------------");
 							}                                    
 							break;
@@ -282,16 +289,17 @@ int main(){
 				//sprawdzam czy nazwisko to skrot np. m. i dopasowuje do imienia
 				else if (licznik_nazwisko < 3) {
 					for (d = 0; d < dlugosc_dziennika; d++) {
-						if (strcmp(imie,imie_dziennik[d]) == 0) {
+						if (strcmp(imie,imie_dziennik[d]) == 0 && nazwisko[0]==nazwisko_dziennik[d][0]) {
 							indeks = d;
 							siadloC = 1;
 							if(dziennikObecnosci[indeks] == 0) {
 								dziennikObecnosci[indeks] = 1;
-								printf("Osoba: %s %s zostala znaleziona w dzienniku jako osoba: %s.\n", imie,nazwisko,dziennik[d]);
+								printf("\n Osoba: %s %s zostala znaleziona w dzienniku jako osoba: %s.\n", imie,nazwisko,dziennik[d]);
+								printf("\n Osoba ta znajduje sie w dzienniku na miejscu: %d.\n",indeks+1);
 								printf("----------------------------------------------------");
 							}
 							else { 
-								printf(" Ta osoba jest juz na tej liscie.\n");
+								printf("\n Osoba %s %s jest juz na tej liscie.\n", imie, nazwisko);
 								printf("----------------------------------------------------");
 							}
 							break;
@@ -299,19 +307,48 @@ int main(){
 					}
 				}
 				else {
-					indeks = 0;
-					siadloC = 0;
+					int a = 0;
+					int b = 0;
+					int zdrobnienie = 0;
+					char imie_bez_zdrobnienia[szerokosc_slownika] = {0,};
+					for (a = 0; a < dlugosc_slownika; a++) {
+							if (strcmp(imie,zdrobnienie_slownik[a]) == 0) {
+								zdrobnienie = 1;
+								break;
+							}
+					}
+
+					if (zdrobnienie==1) {
+						for (b = 0; b < dlugosc_slownika; b++) {
+							imie_bez_zdrobnienia[b] = imie_slownik[a][b];
+						}
+						int c = 0;
+						for (c = 0; c < dlugosc_dziennika; c++){
+							if (strcmp(imie_bez_zdrobnienia,imie_dziennik[c]) == 0 && strcmp(nazwisko,nazwisko_dziennik[c]) == 0) {
+								indeks = c;
+								siadloC = 1;
+								if(dziennikObecnosci[indeks] == 0) {
+									dziennikObecnosci[indeks] = 1;
+									printf("\n Osoba: %s %s zostala znaleziona w dzienniku jako osoba: %s.\n", imie,nazwisko,dziennik[c]);
+									printf("\n Osoba ta znajduje sie w dzienniku na miejscu: %d.\n",indeks+1);
+									printf("----------------------------------------------------");
+								}
+								else { 
+									printf("\n Ta osoba jest juz na tej liscie.\n");
+									printf("----------------------------------------------------");
+								} 
+								break;
+							}
+						}
+					}
+					else {
+							siadloC = 0;
+							indeks = 0;
+					}
 				}
-
-				// for (int i = 0; i < szerokosc_dziennika; i++) {
-				// 	if (nazwisko == nazwisko_dziennik[i]) {
-
-				// 	}
-				// }
-
 				if (siadloC == 0) {
 
-					printf("Nie mozemy dopasowac do dziennika: %s.",lista[i]);
+					printf("\nNie mozemy dopasowac do dziennika: %s.",lista[i]);
 					printf("\n Wyswietlimy dziennik, wybierz numer wiersza w ktorym znajduje sie dana osoba, lub wypisz 0 jezeli jej nie odnajdujesz: \n");
 
 					for(j = 0; j < dlugosc_dziennika; j++) {
@@ -332,12 +369,12 @@ int main(){
 							printf("\n Osoba z listy znajduje sie w dzienniku na %d pozycji: %s.\n",indeks+1,dziennik[indeks]);
 						}
 						else {
-							printf(" Ta osoba jest juz na tej liscie.\n");
+							printf("\n Ta osoba jest juz na tej liscie.\n");
 						}
 						printf("----------------------------------------------------");
 					}					
 					else { 
-						printf("zle wpisales liczbe :(");
+						printf("\nzle wpisales liczbe :(");
 						indeks = 0; 
 					}
 				}
